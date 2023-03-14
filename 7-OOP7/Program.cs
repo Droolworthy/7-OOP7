@@ -152,27 +152,25 @@ namespace OOP7
                     double numberPeopleCompartmentСar = cashRegister.NumberPassengers / numberSeatsCompartmentСar;
                     numberPeopleCompartmentСar = Math.Ceiling(numberPeopleCompartmentСar);
 
-                    Console.WriteLine("Создан поезд из - " + numberPeopleCompartmentСar + " вагонов.");
-
                     for (int i = 0; i < numberPeopleCompartmentСar; i++)
                     {
                         _wagonsList.Add(new Wagon(numberPeopleCompartmentСar, 0, 0));
                     }
 
+                    Console.WriteLine("Создан поезд из - " + numberPeopleCompartmentСar + " вагонов.");
                     return;
                 }
                 else if (userInput.ToLower() == CommandSendPeopleSecondClassCar.ToLower())
                 {
                     double numberPeopleSecondClassCar = cashRegister.NumberPassengers / numberSeatsClassCar;
-                    numberPeopleSecondClassCar = Math.Ceiling(numberPeopleSecondClassCar);
-
-                    Console.WriteLine("Создан поезд из - " + numberPeopleSecondClassCar + " вагонов.");
+                    numberPeopleSecondClassCar = Math.Ceiling(numberPeopleSecondClassCar);                   
 
                     for (int i = 0; i < numberPeopleSecondClassCar; i++)
                     {
                         _wagonsList.Add(new Wagon(0, numberPeopleSecondClassCar, 0));
                     }
 
+                    Console.WriteLine("Создан поезд из - " + numberPeopleSecondClassCar + " вагонов.");
                     return;
                 }
                 else if (userInput.ToLower() == CommandSendNumberPeopleLuxCar.ToLower())
@@ -180,13 +178,12 @@ namespace OOP7
                     double numberPeopleLuxCar = cashRegister.NumberPassengers / numberSeatsLuxCar;
                     numberPeopleLuxCar = Math.Ceiling(numberPeopleLuxCar);
 
-                    Console.WriteLine("Создан поезд из - " + numberPeopleLuxCar + " вагонов.");
-
                     for (int i = 0; i < numberPeopleLuxCar; i++)
                     {
                         _wagonsList.Add(new Wagon(0, 0, numberPeopleLuxCar));
                     }
 
+                    Console.WriteLine("Создан поезд из - " + numberPeopleLuxCar + " вагонов.");
                     return;
                 }
                 else if (userInput.ToLower() == CommandExit.ToLower())

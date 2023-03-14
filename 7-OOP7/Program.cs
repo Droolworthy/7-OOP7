@@ -15,8 +15,8 @@ namespace OOP7
 
             bool isWorking = true;
 
-            Console.WriteLine($"\n{CommandCreateTrain} - СФОРМИРОВАТЬ ПОЕЗД" + $"\n{CommandSendTrain} - ОТПРАВИТЬ ПОЕЗД" +
-                $"\n{CommandShowInformation} - ПОСМОТРЕТЬ ИНФОРМАЦИЮ О ПОЕЗДАХ" + $"\n{CommandExit} - ВЫХОД");
+            Console.WriteLine($"{CommandCreateTrain} - СОЗДАТЬ ПОЕЗД" + $"\n{CommandSendTrain} - ОТПРАВИТЬ ПОЕЗД"
+                + $"\n{CommandShowInformation} - ПОСМОТРЕТЬ ИНФОРМАЦИЮ О ПОЕЗДАХ" + $"\n{CommandExit} - ВЫХОД");
 
             while (isWorking)
             {
@@ -51,8 +51,8 @@ namespace OOP7
 
     class Dispatcher
     {
-        List<Train> _trainList = new List<Train>();
-        List<Direction> _listDirectionTrain = new List<Direction>();
+        private List<Train> _trainList = new List<Train>();
+        private List<Direction> _listDirectionTrain = new List<Direction>();
 
         public void AddTrain()
         {
@@ -61,8 +61,6 @@ namespace OOP7
             Train train = new();
 
             _trainList.Add(train);
-
-            Console.WriteLine("Количество поездов готовых к поездке - " + _trainList.Count);
         }
 
         public void RemoveTrain()
@@ -70,13 +68,13 @@ namespace OOP7
             Console.Write("Введите номер поезда для отправки в путь - ");
             string userInput = Console.ReadLine();
 
-            bool isSuccess = int.TryParse(userInput, out int serialNumber);
+            bool isSuccess = int.TryParse(userInput, out int trainNumber);
 
             if (isSuccess)
             {
                 for (int i = 0; i < _trainList.Count; i++)
                 {
-                    if (serialNumber == i)
+                    if (trainNumber == i)
                     {
                         _trainList.RemoveAt(i);
                         Console.WriteLine("Поезд успешно отправлен.");
@@ -115,45 +113,91 @@ namespace OOP7
 
     class Train
     {
-        List<Wagon> _wagonsList = new();
+        private List<Wagon> _wagonsList = new();
 
         public Train()
         {
             AddWagon();
         }
 
-        public void AddWagon()
+        private void AddWagon()
         {
-            Wagon wagon = new Wagon();
+            const string CommandSendPeopleCompartmentСar = "Плацкарт";
+            const string CommandSendPeopleSecondClassCar = "Купе";
+            const string CommandSendNumberPeopleLuxCar = "Люкс";
+            const string CommandExit = "Выход";
+
+            int numberSeatsCompartmentСar = 64;
+            int numberSeatsClassCar = 32;
+            int numberSeatsLuxCar = 16;
+
+            bool isWorking = true;
+
             CashRegister cashRegister = new CashRegister();
 
             cashRegister.SellTickets();
 
+            Console.WriteLine($"\n{CommandSendPeopleCompartmentСar} - 52 места" + $"\n{CommandSendPeopleSecondClassCar} - 32 места" +
+                $"\n{CommandSendNumberPeopleLuxCar} - 16 мест" + $"\nВыйти в главное меню - {CommandExit}");
+
             Console.WriteLine($"\nУ вас купили билет - {cashRegister.NumberPassengers} пассажиров.");
 
-            int numberPeopleCompartmentСar = cashRegister.NumberPassengers / wagon.CompartmentСar;
-            int remainingPeopleCompartmentСar = cashRegister.NumberPassengers % wagon.CompartmentСar;
-
-            int numberPeopleSecondClassCar = remainingPeopleCompartmentСar / wagon.SecondClassCar;
-            int remainingPeopleSecondClassCar = remainingPeopleCompartmentСar % wagon.SecondClassCar;
-
-            int numberPeopleLuxCar = remainingPeopleSecondClassCar / wagon.LuxCar;
-            int remainingPeopleLuxCar = remainingPeopleSecondClassCar % wagon.LuxCar;
-
-            int numberAllWagons = numberPeopleCompartmentСar + numberPeopleSecondClassCar + numberPeopleLuxCar;
-
-            for (int i = 0; i < numberAllWagons; i++)
+            while (isWorking)
             {
-                _wagonsList.Add(new Wagon(numberPeopleCompartmentСar, numberPeopleSecondClassCar, numberPeopleLuxCar));
+                Console.Write("\nВ какой класс вагонов вы хотите посадить пассажиров - ");
+                string userInput = Console.ReadLine();
+
+                if (userInput.ToLower() == CommandSendPeopleCompartmentСar.ToLower())
+                {
+                    double numberPeopleCompartmentСar = cashRegister.NumberPassengers / numberSeatsCompartmentСar;
+                    numberPeopleCompartmentСar = Math.Ceiling(numberPeopleCompartmentСar);
+
+                    Console.WriteLine("Создан поезд из - " + numberPeopleCompartmentСar + " вагонов.");
+
+                    for (int i = 0; i < numberPeopleCompartmentСar; i++)
+                    {
+                        _wagonsList.Add(new Wagon(numberPeopleCompartmentСar, 0, 0));
+                    }
+
+                    return;
+                }
+                else if (userInput.ToLower() == CommandSendPeopleSecondClassCar.ToLower())
+                {
+                    double numberPeopleSecondClassCar = cashRegister.NumberPassengers / numberSeatsClassCar;
+                    numberPeopleSecondClassCar = Math.Ceiling(numberPeopleSecondClassCar);
+
+                    Console.WriteLine("Создан поезд из - " + numberPeopleSecondClassCar + " вагонов.");
+
+                    for (int i = 0; i < numberPeopleSecondClassCar; i++)
+                    {
+                        _wagonsList.Add(new Wagon(0, numberPeopleSecondClassCar, 0));
+                    }
+
+                    return;
+                }
+                else if (userInput.ToLower() == CommandSendNumberPeopleLuxCar.ToLower())
+                {
+                    double numberPeopleLuxCar = cashRegister.NumberPassengers / numberSeatsLuxCar;
+                    numberPeopleLuxCar = Math.Ceiling(numberPeopleLuxCar);
+
+                    Console.WriteLine("Создан поезд из - " + numberPeopleLuxCar + " вагонов.");
+
+                    for (int i = 0; i < numberPeopleLuxCar; i++)
+                    {
+                        _wagonsList.Add(new Wagon(0, 0, numberPeopleLuxCar));
+                    }
+
+                    return;
+                }
+                else if (userInput.ToLower() == CommandExit.ToLower())
+                {
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Ошибка. Попробуйте ещё раз.");
+                }
             }
-
-            _wagonsList.Add(new Wagon(remainingPeopleLuxCar));
-
-            Console.WriteLine("\nБольшой вагон - " + numberPeopleCompartmentСar);
-            Console.WriteLine("Средний вагон - " + numberPeopleSecondClassCar);
-            Console.WriteLine("Малый вагон - " + numberPeopleLuxCar);
-            Console.WriteLine("Последний вагон сели - " + remainingPeopleLuxCar + " человек");
-            Console.WriteLine("Всего вагонов - " + _wagonsList.Count);
         }
     }
 
@@ -164,26 +208,25 @@ namespace OOP7
         public void SellTickets()
         {
             Random random = new Random();
-            NumberPassengers = random.Next(1000, 2000);
+            NumberPassengers = random.Next(510, 511);
         }
     }
 
     class Wagon
     {
-        public Wagon(int numberSeatsCompartmentСar = 64, int numberSeatsClassCar = 32, int numberSeatsLuxCar = 16)
+        public Wagon(double numberSeatsCompartmentСar, double numberSeatsClassCar, double numberSeatsLuxCar)
         {
             CompartmentСar = numberSeatsCompartmentСar;
             SecondClassCar = numberSeatsClassCar;
             LuxCar = numberSeatsLuxCar;
         }
 
-        public int CompartmentСar { get; private set; }
+        public double CompartmentСar { get; private set; }
 
-        public int SecondClassCar { get; private set; }
+        public double SecondClassCar { get; private set; }
 
-        public int LuxCar { get; private set; }
+        public double LuxCar { get; private set; }
     }
-
 
     class Direction
     {

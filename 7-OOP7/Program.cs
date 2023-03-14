@@ -114,6 +114,12 @@ namespace OOP7
     class Train
     {
         private List<Wagon> _wagonsList = new();
+        private List<Wagon> _seatingСapacityWagon = new List<Wagon>()
+        { 
+             new Wagon(52),
+             new Wagon(32),
+             new Wagon(16)
+        };
 
         public Train()
         {
@@ -126,10 +132,6 @@ namespace OOP7
             const string CommandSendPeopleSecondClassCar = "Купе";
             const string CommandSendNumberPeopleLuxCar = "Люкс";
             const string CommandExit = "Выход";
-
-            int numberSeatsCompartmentСar = 64;
-            int numberSeatsClassCar = 32;
-            int numberSeatsLuxCar = 16;
 
             bool isWorking = true;
 
@@ -149,41 +151,20 @@ namespace OOP7
 
                 if (userInput.ToLower() == CommandSendPeopleCompartmentСar.ToLower())
                 {
-                    double numberPeopleCompartmentСar = cashRegister.NumberPassengers / numberSeatsCompartmentСar;
-                    numberPeopleCompartmentСar = Math.Ceiling(numberPeopleCompartmentСar);
-
-                    for (int i = 0; i < numberPeopleCompartmentСar; i++)
-                    {
-                        _wagonsList.Add(new Wagon(numberPeopleCompartmentСar, 0, 0));
-                    }
-
-                    Console.WriteLine("Создан поезд из - " + numberPeopleCompartmentСar + " вагонов.");
+                    double numberPeopleCar = cashRegister.NumberPassengers / _seatingСapacityWagon[0].PassengerСar;
+                    CreateWagon(numberPeopleCar);
                     return;
                 }
                 else if (userInput.ToLower() == CommandSendPeopleSecondClassCar.ToLower())
                 {
-                    double numberPeopleSecondClassCar = cashRegister.NumberPassengers / numberSeatsClassCar;
-                    numberPeopleSecondClassCar = Math.Ceiling(numberPeopleSecondClassCar);                   
-
-                    for (int i = 0; i < numberPeopleSecondClassCar; i++)
-                    {
-                        _wagonsList.Add(new Wagon(0, numberPeopleSecondClassCar, 0));
-                    }
-
-                    Console.WriteLine("Создан поезд из - " + numberPeopleSecondClassCar + " вагонов.");
+                    double numberPeopleCar = cashRegister.NumberPassengers / _seatingСapacityWagon[1].PassengerСar;
+                    CreateWagon(numberPeopleCar);
                     return;
                 }
                 else if (userInput.ToLower() == CommandSendNumberPeopleLuxCar.ToLower())
                 {
-                    double numberPeopleLuxCar = cashRegister.NumberPassengers / numberSeatsLuxCar;
-                    numberPeopleLuxCar = Math.Ceiling(numberPeopleLuxCar);
-
-                    for (int i = 0; i < numberPeopleLuxCar; i++)
-                    {
-                        _wagonsList.Add(new Wagon(0, 0, numberPeopleLuxCar));
-                    }
-
-                    Console.WriteLine("Создан поезд из - " + numberPeopleLuxCar + " вагонов.");
+                    double numberPeopleCar = cashRegister.NumberPassengers / _seatingСapacityWagon[2].PassengerСar;
+                    CreateWagon(numberPeopleCar);
                     return;
                 }
                 else if (userInput.ToLower() == CommandExit.ToLower())
@@ -196,6 +177,18 @@ namespace OOP7
                 }
             }
         }
+
+        private void CreateWagon(double numberPeopleCar)
+        {
+            numberPeopleCar = Math.Ceiling(numberPeopleCar);
+
+            Console.WriteLine("Создан поезд из - " + numberPeopleCar + " вагонов.");
+
+            for (int i = 0; i < numberPeopleCar; i++)
+            {
+                _wagonsList.Add(new Wagon(numberPeopleCar));
+            }
+        }
     }
 
     class CashRegister
@@ -205,24 +198,18 @@ namespace OOP7
         public void SellTickets()
         {
             Random random = new Random();
-            NumberPassengers = random.Next(510, 511);
+            NumberPassengers = random.Next(500, 1000);
         }
     }
 
     class Wagon
     {
-        public Wagon(double numberSeatsCompartmentСar, double numberSeatsClassCar, double numberSeatsLuxCar)
+        public Wagon(double numberSeatsСar)
         {
-            CompartmentСar = numberSeatsCompartmentСar;
-            SecondClassCar = numberSeatsClassCar;
-            LuxCar = numberSeatsLuxCar;
+            PassengerСar = numberSeatsСar;
         }
 
-        public double CompartmentСar { get; private set; }
-
-        public double SecondClassCar { get; private set; }
-
-        public double LuxCar { get; private set; }
+        public double PassengerСar { get; private set; }
     }
 
     class Direction

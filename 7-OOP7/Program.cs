@@ -130,7 +130,7 @@ namespace OOP7
 
             cashRegister.SellTickets();
 
-            Console.WriteLine($"\nУ вас купили билет - {cashRegister.NumberPassengers} пассажиров.");
+            Console.WriteLine($"\nУ вас купили билет - {cashRegister.NumberPassengers} пассажиров.");            
             Console.WriteLine(wagonCompartmentСar.Name + " - " + wagonCompartmentСar.CompartmentСar + " места.");
             Console.WriteLine(wagonSecondClassCar.Name + " - " + wagonSecondClassCar.SecondClassCar + " места.");
             Console.WriteLine(wagonLuxCar.Name + " - " + wagonLuxCar.LuxCar + " мест.");

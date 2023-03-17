@@ -115,7 +115,7 @@ namespace OOP7
         }
     }
 
-    class Train : Coupe
+    class Train : Wagon
     {
         private List<Wagon> _wagonsList = new();
 
@@ -142,17 +142,17 @@ namespace OOP7
 
             if (userInput.ToLower() == CommandSendPeopleCompartmentСar.ToLower())
             {
-                double numberPeopleCompartmentСar = cashRegister.NumberPassengers / _seatingСapacityWagon[0].PassengerСar;
+                double numberPeopleCompartmentСar = cashRegister.NumberPassengers / _seatingСapacityWagonCompartmentСar[0].PassengerСar;
                 CreateWagon(numberPeopleCompartmentСar);
             }
             else if (userInput.ToLower() == CommandSendPeopleSecondClassCar.ToLower())
             {
-                double numberPeopleSecondClassCar = cashRegister.NumberPassengers / _seatingСapacityWagon[1].PassengerСar;
+                double numberPeopleSecondClassCar = cashRegister.NumberPassengers / _seatingСapacityWagonCompartmentСar[1].PassengerСar;
                 CreateWagon(numberPeopleSecondClassCar);
             }
             else if (userInput.ToLower() == CommandSendNumberPeopleLuxCar.ToLower())
             {
-                double numberPeopleLuxCar = cashRegister.NumberPassengers / _seatingСapacityWagon[2].PassengerСar;
+                double numberPeopleLuxCar = cashRegister.NumberPassengers / _seatingСapacityWagonCompartmentСar[2].PassengerСar;
                 CreateWagon(numberPeopleLuxCar);
             }
             else
@@ -174,25 +174,29 @@ namespace OOP7
         }
     }
 
-    class Coupe
+    class CompartmentСar : Wagon
     {
-        protected List<Wagon> _seatingСapacityWagon = new()
-        {
-             new Wagon(52),
-             new Wagon(32),
-             new Wagon(16)
-        };
+        public CompartmentСar(double numberSeatsСar) : base(numberSeatsСar) { }
+    }
 
-        public Coupe(double numberSeatsСar)
-        {
-            PassengerСar = numberSeatsСar;
-        }
+    class SecondClassCar : Wagon
+    {
+        public SecondClassCar(double numberSeatsСar) : base(numberSeatsСar) { }
+    }
 
-        public double PassengerСar { get; private set; }
+    class LuxCar : Wagon
+    {
+        public LuxCar(double numberSeatsСar) : base(numberSeatsСar) { }
     }
 
     class Wagon
     {
+        protected List<CompartmentСar> _seatingСapacityWagonCompartmentСar = new() { new CompartmentСar(52) };
+
+        protected List<SecondClassCar> _seatingСapacityWagonSecondClassCar = new() { new SecondClassCar(32) };
+
+        protected List<LuxCar> _seatingСapacityWagonLuxCar = new() { new LuxCar(16) };
+
         public Wagon(double numberSeatsСar)
         {
             PassengerСar = numberSeatsСar;

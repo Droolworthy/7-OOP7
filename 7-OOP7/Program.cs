@@ -11,6 +11,8 @@ namespace OOP7
             const string CommandShowInformation = "3";
             const string CommandExit = "4";
 
+            double numberSeatsСar = 0;
+
             Dispatcher dispatcher = new Dispatcher();
 
             bool isWorking = true;
@@ -25,7 +27,7 @@ namespace OOP7
 
                 switch (userInput)
                 {
-                    case CommandCreateTrain:
+                    case CommandCreateTrain:  
                         dispatcher.AddTrain();
                         break;
 
@@ -56,9 +58,11 @@ namespace OOP7
 
         public void AddTrain()
         {
-            //AddDirection();
+            AddDirection();
 
-            Train train = new();
+            double numberSeatsСar = 0;
+
+            Train train = new(numberSeatsСar);
 
             _trainList.Add(train);
         }
@@ -111,22 +115,13 @@ namespace OOP7
         }
     }
 
-    class Train
+    class Train : Coupe
     {
         private List<Wagon> _wagonsList = new();
-        private List<Wagon> _seatingСapacityWagon = new List<Wagon>()
-        {
-             new Wagon(52),
-             new Wagon(32),
-             new Wagon(16)
-        };
 
-        public Train()
-        {
-            AddWagon();
-        }
+        public Train(double numberSeatsСar) : base(numberSeatsСar) { AddWagon(); }
 
-        private void AddWagon()
+        public void AddWagon()
         {
             const string CommandSendPeopleCompartmentСar = "Плацкарт";
             const string CommandSendPeopleSecondClassCar = "Купе";
@@ -178,6 +173,24 @@ namespace OOP7
             Console.WriteLine("Создан поезд из - " + numberPeopleCar + " вагонов.");
         }
     }
+
+    class Coupe
+    {
+        protected List<Wagon> _seatingСapacityWagon = new()
+        {
+             new Wagon(52),
+             new Wagon(32),
+             new Wagon(16)
+        };
+
+        public Coupe(double numberSeatsСar)
+        {
+            PassengerСar = numberSeatsСar;
+        }
+
+        public double PassengerСar { get; private set; }
+    }
+
     class Wagon
     {
         public Wagon(double numberSeatsСar)

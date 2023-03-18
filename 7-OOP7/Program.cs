@@ -11,8 +11,6 @@ namespace OOP7
             const string CommandShowInformation = "3";
             const string CommandExit = "4";
 
-            double numberSeatsСar = 0;
-
             Dispatcher dispatcher = new Dispatcher();
 
             bool isWorking = true;
@@ -27,7 +25,7 @@ namespace OOP7
 
                 switch (userInput)
                 {
-                    case CommandCreateTrain:  
+                    case CommandCreateTrain:
                         dispatcher.AddTrain();
                         break;
 
@@ -60,9 +58,7 @@ namespace OOP7
         {
             AddDirection();
 
-            double numberSeatsСar = 0;
-
-            Train train = new(numberSeatsСar);
+            Train train = new();
 
             _trainList.Add(train);
         }
@@ -115,49 +111,66 @@ namespace OOP7
         }
     }
 
-    class Train : Wagon
+    class Train
     {
         private List<Wagon> _wagonsList = new();
+        private List<Wagon> _seatingСapacityWagon = new()
+        {
+            new CompartmentСar(52),
+            new SecondClassCar(32),
+            new LuxCar(16)
+        }; 
 
-        public Train(double numberSeatsСar) : base(numberSeatsСar) { AddWagon(); }
+        public Train() { AddWagon(); }
 
         public void AddWagon()
         {
-            const string CommandSendPeopleCompartmentСar = "Плацкарт";
-            const string CommandSendPeopleSecondClassCar = "Купе";
-            const string CommandSendNumberPeopleLuxCar = "Люкс";
-            const string CommandExit = "Выход";
-
             CashRegister cashRegister = new CashRegister();
 
             cashRegister.SellTickets();
 
+            Console.WriteLine("Виды вагонов: " + "Плацкарт - 52 места, " + "Купе - 32, " + "Люкс - 16 мест");
+
+            for (int i = 0; i < _seatingСapacityWagon.Count; i++)
+            {
+                Console.WriteLine(i + " - номер вагона, " + _seatingСapacityWagon[i].PassengerСar + " места");
+            }
+
             Console.WriteLine($"\nУ вас купили билет - {cashRegister.NumberPassengers} пассажиров.");
 
-            Console.WriteLine($"\n{CommandSendPeopleCompartmentСar} - 52 места" + $"\n{CommandSendPeopleSecondClassCar} - 32 места" +
-                $"\n{CommandSendNumberPeopleLuxCar} - 16 мест" + $"\nВыйти в главное меню - {CommandExit}");
-
-            Console.Write("\nВ какой класс вагонов вы хотите посадить пассажиров - ");
+            Console.Write("\nВыберите номер вагона куда вы хотите посадить пассажиров - ");
             string userInput = Console.ReadLine();
 
-            if (userInput.ToLower() == CommandSendPeopleCompartmentСar.ToLower())
+            bool isSuccess = int.TryParse(userInput, out int trainNumber);
+
+            if (isSuccess)
             {
-                double numberPeopleCompartmentСar = cashRegister.NumberPassengers / _seatingСapacityWagonCompartmentСar[0].PassengerСar;
-                CreateWagon(numberPeopleCompartmentСar);
-            }
-            else if (userInput.ToLower() == CommandSendPeopleSecondClassCar.ToLower())
-            {
-                double numberPeopleSecondClassCar = cashRegister.NumberPassengers / _seatingСapacityWagonCompartmentСar[1].PassengerСar;
-                CreateWagon(numberPeopleSecondClassCar);
-            }
-            else if (userInput.ToLower() == CommandSendNumberPeopleLuxCar.ToLower())
-            {
-                double numberPeopleLuxCar = cashRegister.NumberPassengers / _seatingСapacityWagonCompartmentСar[2].PassengerСar;
-                CreateWagon(numberPeopleLuxCar);
+                for (int i = 0; i < _seatingСapacityWagon.Count; i++)
+                {
+                    if (trainNumber == i)
+                    {
+                        double numberPeopleCompartmentСar = cashRegister.NumberPassengers / _seatingСapacityWagon[i].PassengerСar;
+                        CreateWagon(numberPeopleCompartmentСar);
+                    }
+                    else if (trainNumber == i)
+                    {
+                        double numberPeopleSecondClassCar = cashRegister.NumberPassengers / _seatingСapacityWagon[i].PassengerСar;
+                        CreateWagon(numberPeopleSecondClassCar);
+                    }
+                    else if (trainNumber == i)
+                    {
+                        double numberPeopleLuxCar = cashRegister.NumberPassengers / _seatingСapacityWagon[i].PassengerСar;
+                        CreateWagon(numberPeopleLuxCar);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ошибка. Даный вагон не найден в списке.");
+                    }
+                }
             }
             else
             {
-                Console.WriteLine("Ошибка. Попробуйте ещё раз.");
+                Console.WriteLine("Ошибка. Неверный ввод.");
             }
         }
 
@@ -191,12 +204,6 @@ namespace OOP7
 
     class Wagon
     {
-        protected List<CompartmentСar> _seatingСapacityWagonCompartmentСar = new() { new CompartmentСar(52) };
-
-        protected List<SecondClassCar> _seatingСapacityWagonSecondClassCar = new() { new SecondClassCar(32) };
-
-        protected List<LuxCar> _seatingСapacityWagonLuxCar = new() { new LuxCar(16) };
-
         public Wagon(double numberSeatsСar)
         {
             PassengerСar = numberSeatsСar;

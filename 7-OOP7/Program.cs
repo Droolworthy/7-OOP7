@@ -129,7 +129,8 @@ namespace OOP7
 
             cashRegister.SellTickets();
 
-            Console.WriteLine("Виды вагонов: " + "Плацкарт - 52 места, " + "Купе - 32, " + "Люкс - 16 мест");
+             Console.WriteLine("Виды вагонов: " + $"Плацкарт - {_seatingСapacityWagon[0].PassengerСar} места, " 
+                + $"Купе - {_seatingСapacityWagon[0].PassengerСar}, " + $"Люкс - {_seatingСapacityWagon[0].PassengerСar} мест");
 
             for (int i = 0; i < _seatingСapacityWagon.Count; i++)
             {

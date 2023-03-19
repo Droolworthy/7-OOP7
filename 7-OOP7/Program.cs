@@ -153,16 +153,6 @@ namespace OOP7
                         double numberPeopleCompartmentСar = cashRegister.NumberPassengers / _seatingСapacityWagon[i].PassengerСar;
                         CreateWagon(numberPeopleCompartmentСar);
                     }
-                    else if (trainNumber == i)
-                    {
-                        double numberPeopleSecondClassCar = cashRegister.NumberPassengers / _seatingСapacityWagon[i].PassengerСar;
-                        CreateWagon(numberPeopleSecondClassCar);
-                    }
-                    else if (trainNumber == i)
-                    {
-                        double numberPeopleLuxCar = cashRegister.NumberPassengers / _seatingСapacityWagon[i].PassengerСar;
-                        CreateWagon(numberPeopleLuxCar);
-                    }
                     else
                     {
                         Console.WriteLine("Ошибка. Даный вагон не найден в списке.");

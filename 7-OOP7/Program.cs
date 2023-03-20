@@ -151,6 +151,10 @@ namespace OOP7
                 {
                     CreateWagon(luxCar, cashRegister, trainNumber);
                 }
+                else
+                {
+                    Console.WriteLine("Ошибка. Попробуйте ещё раз.");
+                }
             }
             else
             {

@@ -119,7 +119,7 @@ namespace OOP7
             new CompartmentСar(50),
             new SecondClassCar(25),
             new LuxCar(10)
-        }; 
+        };
 
         public Train() { AddWagon(); }
 
@@ -127,7 +127,7 @@ namespace OOP7
         {
             CashRegister cashRegister = new CashRegister();
 
-            cashRegister.SellTickets();           
+            cashRegister.SellTickets();
 
             for (int i = 0; i < _seatingСapacityWagon.Count; i++)
             {
@@ -143,18 +143,20 @@ namespace OOP7
 
             if (isSuccess)
             {
-                for (int numberWagons = 0; numberWagons < _seatingСapacityWagon.Count; numberWagons++)
+                for (double numberWagons = 0; numberWagons < _seatingСapacityWagon.Count; numberWagons++)
                 {
                     if (trainNumber == numberWagons)
                     {
-                        numberWagons = cashRegister.NumberPassengers / _seatingСapacityWagon[numberWagons].PassengerСar;
+                        numberWagons = cashRegister.NumberPassengers / _seatingСapacityWagon[(int)numberWagons].PassengerСar;
+
+                        numberWagons = Math.Ceiling(numberWagons);
 
                         for (int i = 0; i < numberWagons; i++)
                         {
                             _wagonsList.Add(new Wagon(numberWagons));
                         }
 
-                        Console.WriteLine("Создан поезд из - " + numberWagons + " вагонов.");
+                        Console.WriteLine("Создан поезд из - " + _wagonsList.Count + " вагонов.");
                     }
                     else
                     {
@@ -186,12 +188,12 @@ namespace OOP7
 
     class Wagon
     {
-        public Wagon(int numberSeatsСar)
+        public Wagon(double numberSeatsСar)
         {
             PassengerСar = numberSeatsСar;
         }
 
-        public int PassengerСar { get; private set; }
+        public double PassengerСar { get; private set; }
     }
 
     class CashRegister
@@ -201,7 +203,7 @@ namespace OOP7
         public void SellTickets()
         {
             Random random = new Random();
-            NumberPassengers = random.Next(100, 101);
+            NumberPassengers = random.Next(500, 1000);
         }
     }
 

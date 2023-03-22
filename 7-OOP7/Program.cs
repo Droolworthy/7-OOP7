@@ -119,7 +119,9 @@ namespace OOP7
 
         public void AddWagon()
         {
-            CashRegister cashRegister = new CashRegister();
+            List<Wagon> seatingСapacityWagon = new List<Wagon>();
+
+            CashRegister cashRegister = new CashRegister();           
 
             cashRegister.SellTickets();
 
@@ -127,76 +129,67 @@ namespace OOP7
             double secondClassCar = 25;
             double luxCar = 10;
 
-            Console.WriteLine($"\nУ вас купили билет - {cashRegister.NumberPassengers} пассажиров.");
-            Console.WriteLine("\nПлацкарт - " + сompartmentСar + " пассажиров.");
-            Console.WriteLine("Купе - " + secondClassCar + " пассажиров.");
-            Console.WriteLine("Люкс - " + luxCar + " пассажиров.");
+            seatingСapacityWagon.Add(new CompartmentСar(сompartmentСar));
+            seatingСapacityWagon.Add(new SecondClassCar(secondClassCar));
+            seatingСapacityWagon.Add(new LuxCar(luxCar));
 
-            Console.Write("\nВыберите вместимость вагона, куда посадить пассажиров - ");
+            Console.WriteLine($"\nУ вас купили билет - {cashRegister.NumberPassengers} пассажиров.");
+
+            for(int i = 0; i < seatingСapacityWagon.Count; i++)
+            {
+                Console.WriteLine(i + " - номер вагона, " + seatingСapacityWagon[i].PassengerСar + " пассажиров");
+            }
+
+            Console.Write("\nВыберите номер вагона, куда посадить пассажиров - ");
             string userInput = Console.ReadLine();
 
             bool isSuccess = int.TryParse(userInput, out int trainNumber);
 
             if (isSuccess)
             {
-                if(trainNumber == сompartmentСar)
-                {
-                    CreateWagon(сompartmentСar, cashRegister, trainNumber);
-                }
-                else if (trainNumber == secondClassCar)
-                {
-                    CreateWagon(secondClassCar, cashRegister, trainNumber);
-                }
-                else if (trainNumber == luxCar)
-                {
-                    CreateWagon(luxCar, cashRegister, trainNumber);
-                }
-                else
-                {
-                    Console.WriteLine("Ошибка. Попробуйте ещё раз.");
-                }
+                CreateWagon(seatingСapacityWagon, cashRegister, trainNumber);
             }
             else
             {
-                Console.WriteLine("Ошибка. Неверный ввод.");
+                Console.WriteLine("Ошибка. Попробуйте ещё раз.");
             }
         }
 
-        private void CreateWagon(double numberWagons, CashRegister cashRegister, int trainNumber)
+        private void CreateWagon(List<Wagon> seatingСapacityWagon, CashRegister cashRegister, int trainNumber)
         {
-            if (trainNumber == numberWagons)
+            for (double numberWagons = 0; numberWagons < seatingСapacityWagon.Count; numberWagons++)
             {
-                numberWagons = cashRegister.NumberPassengers / numberWagons;
-
-                numberWagons = Math.Ceiling(numberWagons);
-
-                for (int i = 0; i < numberWagons; i++)
+                if (trainNumber == numberWagons)
                 {
-                    _wagonsList.Add(new Wagon(numberWagons));
+                    numberWagons = cashRegister.NumberPassengers / seatingСapacityWagon[(int)numberWagons].PassengerСar;
+
+                    numberWagons = Math.Ceiling(numberWagons);
+
+                    for (int i = 0; i < numberWagons; i++)
+                    {
+                        _wagonsList.Add(new Wagon(numberWagons));
+                    }
+
+                    Console.WriteLine("Создан поезд из - " + numberWagons + " вагонов.");
                 }
 
-                Console.WriteLine("Создан поезд из - " + _wagonsList.Count + " вагонов.");
-            }
-            else
-            {
-                Console.WriteLine("Ошибка. Даный вагон не найден в списке.");
             }
         }
     }
 
     class CompartmentСar : Wagon
     {
-        public CompartmentСar(int numberSeatsСar) : base(numberSeatsСar) { }
+        public CompartmentСar(double numberSeatsСar) : base(numberSeatsСar) { }
     }
 
     class SecondClassCar : Wagon
     {
-        public SecondClassCar(int numberSeatsСar) : base(numberSeatsСar) { }
+        public SecondClassCar(double numberSeatsСar) : base(numberSeatsСar) { }
     }
 
     class LuxCar : Wagon
     {
-        public LuxCar(int numberSeatsСar) : base(numberSeatsСar) { }
+        public LuxCar(double numberSeatsСar) : base(numberSeatsСar) { }
     }
 
     class Wagon

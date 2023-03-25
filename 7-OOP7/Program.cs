@@ -6,46 +6,37 @@ namespace OOP7
     {
         static void Main(string[] args)
         {
-            const string CommandCreateTrain = "1";
-            const string CommandSendTrain = "2";
-            const string CommandShowInformation = "3";
-            const string CommandExit = "4";
+            const string CommandSendTrain = "1";
+            const string CommandExit = "2";
 
             Dispatcher dispatcher = new Dispatcher();
 
             bool isWorking = true;
 
-            Console.WriteLine($"{CommandCreateTrain} - СОЗДАТЬ ПОЕЗД" + $"\n{CommandSendTrain} - ОТПРАВИТЬ ПОЕЗД"
-                + $"\n{CommandShowInformation} - ПОСМОТРЕТЬ ИНФОРМАЦИЮ О ПОЕЗДАХ" + $"\n{CommandExit} - ВЫХОД");
+            Console.WriteLine($"{CommandSendTrain} - ОТПРАВИТЬ ПОЕЗД" + $"\n{CommandExit} - ВЫХОД");
 
             while (isWorking)
             {
                 Console.Write("\nВведите команду: ");
                 string userInput = Console.ReadLine();
 
-                switch (userInput)
+                if (userInput == CommandSendTrain)
                 {
-                    case CommandCreateTrain:
-                        dispatcher.AddTrain();
-                        break;
+                    dispatcher.AddTrain();
 
-                    case CommandSendTrain:
-                        dispatcher.RemoveTrain();
-                        break;
+                    dispatcher.ShowInfoSendTrain();
 
-                    case CommandShowInformation:
-                        dispatcher.ShowInfoSendTrain();
-                        break;
-
-                    case CommandExit:
-                        isWorking = false;
-                        break;
-
-                    default:
-                        Console.WriteLine($"\nВведите {CommandCreateTrain}, {CommandSendTrain}, {CommandShowInformation} или {CommandExit}");
-                        break;
+                    dispatcher.RemoveTrain();
                 }
-            }
+                else if (userInput == CommandExit)
+                {
+                    isWorking = false;
+                }
+                else
+                {
+                    Console.WriteLine($"Ошибка. Введите {CommandSendTrain} или {CommandExit}"); 
+                }              
+            }           
         }
     }
 
@@ -59,47 +50,38 @@ namespace OOP7
             AddDirection();
 
             Train train = new();
-
-            _trainList.Add(train);
+            
+            _trainList.Add(train); 
         }
 
         public void RemoveTrain()
         {
-            Console.Write("Введите номер поезда для отправки в путь - ");
-            string userInput = Console.ReadLine();
-
-            bool isSuccess = int.TryParse(userInput, out int trainNumber);
-
-            if (isSuccess)
-            {
-                for (int i = 0; i < _trainList.Count; i++)
-                {
-                    if (trainNumber == i)
-                    {
-                        _trainList.RemoveAt(i);
-                        Console.WriteLine("Поезд успешно отправлен.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Ошибка. Попробуйте ещё раз.");
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("Ошибка. Неверный ввод.");
-            }
+            int userInput = 0;
+            _trainList.RemoveAt(userInput);
+            _listDirectionTrain.RemoveAt(userInput);
         }
 
         public void ShowInfoSendTrain()
         {
             for (int i = 0; i < _listDirectionTrain.Count; i++)
             {
-                Console.WriteLine("Точка отправления - " + _listDirectionTrain[i].DeparturePoint + "\nТочка прибытия - " + _listDirectionTrain[i].PlaceArrival);
+                Console.WriteLine("Внимание! Пассажиры! Двери закрываются! Поезд отправляется от станции - " 
+                    + _listDirectionTrain[i].DeparturePoint + ". Следующая станция город - " + _listDirectionTrain[i].PlaceArrival);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("\nПоезд едет.");
+                Thread.Sleep(1000);
+            }
+
+            for (int i = 0; i < _listDirectionTrain.Count; i++)
+            {
+                Console.WriteLine("\nПоздравляю! Вы приехали в город - " + _listDirectionTrain[i].PlaceArrival);
             }
         }
 
-        private void AddDirection()
+        public void AddDirection()
         {
             Console.Write("\nСоздайте точку отправления - ");
             string startingPointRoute = Console.ReadLine();
@@ -121,7 +103,7 @@ namespace OOP7
         {
             List<Wagon> seatingСapacityWagon = new List<Wagon>();
 
-            CashRegister cashRegister = new CashRegister();           
+            CashRegister cashRegister = new CashRegister();
 
             cashRegister.SellTickets();
 
@@ -135,7 +117,7 @@ namespace OOP7
 
             Console.WriteLine($"\nУ вас купили билет - {cashRegister.NumberPassengers} пассажиров.");
 
-            for(int i = 0; i < seatingСapacityWagon.Count; i++)
+            for (int i = 0; i < seatingСapacityWagon.Count; i++)
             {
                 Console.WriteLine(i + " - номер вагона, " + seatingСapacityWagon[i].PassengerСar + " пассажиров");
             }
@@ -170,9 +152,8 @@ namespace OOP7
                         _wagonsList.Add(new Wagon(numberWagons));
                     }
 
-                    Console.WriteLine("Создан поезд из - " + numberWagons + " вагонов.");
+                    Console.WriteLine($"\n{cashRegister.NumberPassengers} пассажиров сели в " + numberWagons + " вагонов.");
                 }
-
             }
         }
     }
@@ -209,7 +190,7 @@ namespace OOP7
         public void SellTickets()
         {
             Random random = new Random();
-            NumberPassengers = random.Next(103, 104);
+            NumberPassengers = random.Next(200, 800);
         }
     }
 

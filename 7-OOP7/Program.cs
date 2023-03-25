@@ -81,7 +81,7 @@ namespace OOP7
             }
         }
 
-        public void AddDirection()
+        private void AddDirection()
         {
             Console.Write("\nСоздайте точку отправления - ");
             string startingPointRoute = Console.ReadLine();
@@ -99,7 +99,7 @@ namespace OOP7
 
         public Train() { AddWagon(); }
 
-        public void AddWagon()
+        private void AddWagon()
         {
             List<Wagon> seatingСapacityWagon = new List<Wagon>();
 

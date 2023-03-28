@@ -52,8 +52,6 @@ namespace OOP7
 
             Train train = new Train();
 
-            train.AddWagon();
-
             if (train.GetWagonsCount() > 0)
             {
                 _trainList.Add(train);
@@ -63,13 +61,6 @@ namespace OOP7
             {
                 Console.WriteLine("Ошибка. Такого вагона нет в списке. Попробуйте ещё раз.");
             }            
-        }
-
-        public void RemoveTrain()
-        {
-            int userInput = 0;
-            _trainList.RemoveAt(userInput);
-            _listDirectionTrain.RemoveAt(userInput);         
         }
 
         public void ShowInfoSendTrain()
@@ -88,6 +79,13 @@ namespace OOP7
             }           
         }
 
+        private void RemoveTrain()
+        {
+            int userInput = 0;
+            _trainList.RemoveAt(userInput);
+            _listDirectionTrain.RemoveAt(userInput);
+        }
+
         private void AddDirection(ref string startingPointRoute, ref string finalPointRoute)
         {
             Console.Write("\nСоздайте точку отправления - ");
@@ -102,12 +100,17 @@ namespace OOP7
     {
         private List<Wagon> _wagonsList = new();
 
+        public Train()
+        {
+            AddWagon();
+        }
+
         public int GetWagonsCount()
         {
             return _wagonsList.Count; 
         }
 
-        public void AddWagon()
+        private void AddWagon()
         {
             List<Wagon> seatingСapacityWagon = new List<Wagon>();
 

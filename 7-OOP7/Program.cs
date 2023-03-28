@@ -25,8 +25,6 @@ namespace OOP7
                     dispatcher.AddTrain();
 
                     dispatcher.ShowInfoSendTrain();
-
-                    dispatcher.RemoveTrain();
                 }
                 else if (userInput == CommandExit)
                 {
@@ -34,9 +32,9 @@ namespace OOP7
                 }
                 else
                 {
-                    Console.WriteLine($"Ошибка. Введите {CommandSendTrain} или {CommandExit}"); 
-                }              
-            }           
+                    Console.WriteLine($"Ошибка. Введите {CommandSendTrain} или {CommandExit}");
+                }
+            }
         }
     }
 
@@ -47,49 +45,56 @@ namespace OOP7
 
         public void AddTrain()
         {
-            AddDirection();
+            string startingPointRoute = "";
+            string finalPointRoute = "";
 
-            Train train = new();
-            
-            _trainList.Add(train); 
+            AddDirection(ref startingPointRoute, ref finalPointRoute);
+
+            Train train = new Train();
+
+            train.AddWagon();
+
+            if (train.GetWagonsCount() > 0)
+            {
+                _trainList.Add(train);
+                _listDirectionTrain.Add(new Direction(startingPointRoute, finalPointRoute));
+            }
+            else
+            {
+                Console.WriteLine("Ошибка. Такого вагона нет в списке. Попробуйте ещё раз.");
+            }            
         }
 
         public void RemoveTrain()
         {
             int userInput = 0;
             _trainList.RemoveAt(userInput);
-            _listDirectionTrain.RemoveAt(userInput);
+            _listDirectionTrain.RemoveAt(userInput);         
         }
 
         public void ShowInfoSendTrain()
         {
             for (int i = 0; i < _listDirectionTrain.Count; i++)
             {
-                Console.WriteLine("Внимание! Пассажиры! Двери закрываются! Поезд отправляется от станции - " 
+                Console.WriteLine("Внимание! Пассажиры! Двери закрываются! Поезд отправляется от станции - "
                     + _listDirectionTrain[i].DeparturePoint + ". Следующая станция город - " + _listDirectionTrain[i].PlaceArrival);
-            }
-
-            for (int i = 0; i < 3; i++)
-            {
-                Console.WriteLine("\nПоезд едет.");
-                Thread.Sleep(1000);
             }
 
             for (int i = 0; i < _listDirectionTrain.Count; i++)
             {
                 Console.WriteLine("\nПоздравляю! Вы приехали в город - " + _listDirectionTrain[i].PlaceArrival);
-            }
+
+                RemoveTrain();
+            }           
         }
 
-        private void AddDirection()
+        private void AddDirection(ref string startingPointRoute, ref string finalPointRoute)
         {
             Console.Write("\nСоздайте точку отправления - ");
-            string startingPointRoute = Console.ReadLine();
+            startingPointRoute = Console.ReadLine();
 
             Console.Write("Создайте точку прибытия - ");
-            string finalPointRoute = Console.ReadLine();
-
-            _listDirectionTrain.Add(new Direction(startingPointRoute, finalPointRoute));
+            finalPointRoute = Console.ReadLine();           
         }
     }
 
@@ -97,9 +102,12 @@ namespace OOP7
     {
         private List<Wagon> _wagonsList = new();
 
-        public Train() { AddWagon(); }
+        public int GetWagonsCount()
+        {
+            return _wagonsList.Count; 
+        }
 
-        private void AddWagon()
+        public void AddWagon()
         {
             List<Wagon> seatingСapacityWagon = new List<Wagon>();
 
@@ -107,9 +115,9 @@ namespace OOP7
 
             cashRegister.SellTickets();
 
-            double сompartmentСar = 50;
-            double secondClassCar = 25;
-            double luxCar = 10;
+            int сompartmentСar = 50;
+            int secondClassCar = 25;
+            int luxCar = 10;
 
             seatingСapacityWagon.Add(new CompartmentСar(сompartmentСar));
             seatingСapacityWagon.Add(new SecondClassCar(secondClassCar));
@@ -128,59 +136,72 @@ namespace OOP7
             bool isSuccess = int.TryParse(userInput, out int trainNumber);
 
             if (isSuccess)
-            {
-                CreateWagon(seatingСapacityWagon, cashRegister, trainNumber);
+            {               
+                for (int numberWagon = 0; numberWagon < seatingСapacityWagon.Count; numberWagon++)
+                {
+                    СreateWagons(seatingСapacityWagon, cashRegister, trainNumber, numberWagon);
+                }
+
+                for (int numberWagon = 0; numberWagon < seatingСapacityWagon.Count; numberWagon++)
+                {
+                    CreateAdditionalWagon(seatingСapacityWagon, cashRegister, trainNumber, numberWagon);
+                }                            
             }
             else
             {
                 Console.WriteLine("Ошибка. Попробуйте ещё раз.");
             }
+        }      
+
+        private void СreateWagons(List<Wagon> seatingСapacityWagon, CashRegister cashRegister, int trainNumber, int numberWagon)
+        {
+            if (trainNumber == numberWagon)
+            {
+                numberWagon = cashRegister.NumberPassengers / seatingСapacityWagon[numberWagon].PassengerСar;
+
+                for (int i = 0; i < numberWagon; i++)
+                {
+                    _wagonsList.Add(new Wagon(numberWagon));
+                }
+            }
         }
 
-        private void CreateWagon(List<Wagon> seatingСapacityWagon, CashRegister cashRegister, int trainNumber)
+        private void CreateAdditionalWagon(List<Wagon> seatingСapacityWagon, CashRegister cashRegister, int trainNumber, int numberWagon)
         {
-            for (double numberWagons = 0; numberWagons < seatingСapacityWagon.Count; numberWagons++)
+            if (trainNumber == numberWagon)
             {
-                if (trainNumber == numberWagons)
-                {
-                    numberWagons = cashRegister.NumberPassengers / seatingСapacityWagon[(int)numberWagons].PassengerСar;
+                numberWagon = cashRegister.NumberPassengers % seatingСapacityWagon[numberWagon].PassengerСar;
 
-                    numberWagons = Math.Ceiling(numberWagons);
+                _wagonsList.Add(new Wagon(numberWagon));
 
-                    for (int i = 0; i < numberWagons; i++)
-                    {
-                        _wagonsList.Add(new Wagon(numberWagons));
-                    }
-
-                    Console.WriteLine($"\n{cashRegister.NumberPassengers} пассажиров сели в " + numberWagons + " вагонов.");
-                }
+                Console.WriteLine($"\n{cashRegister.NumberPassengers} пассажиров сели в " + _wagonsList.Count + " вагонов.");
             }
         }
     }
 
     class CompartmentСar : Wagon
     {
-        public CompartmentСar(double numberSeatsСar) : base(numberSeatsСar) { }
+        public CompartmentСar(int numberSeatsСar) : base(numberSeatsСar) { }
     }
 
     class SecondClassCar : Wagon
     {
-        public SecondClassCar(double numberSeatsСar) : base(numberSeatsСar) { }
+        public SecondClassCar(int numberSeatsСar) : base(numberSeatsСar) { }
     }
 
     class LuxCar : Wagon
     {
-        public LuxCar(double numberSeatsСar) : base(numberSeatsСar) { }
+        public LuxCar(int numberSeatsСar) : base(numberSeatsСar) { }
     }
 
     class Wagon
     {
-        public Wagon(double numberSeatsСar)
+        public Wagon(int numberSeatsСar)
         {
             PassengerСar = numberSeatsСar;
         }
 
-        public double PassengerСar { get; private set; }
+        public int PassengerСar { get; private set; }
     }
 
     class CashRegister
@@ -190,7 +211,7 @@ namespace OOP7
         public void SellTickets()
         {
             Random random = new Random();
-            NumberPassengers = random.Next(200, 800);
+            NumberPassengers = random.Next(200, 500);
         }
     }
 
